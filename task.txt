@@ -1,0 +1,16 @@
+// TASK DAY 1
+    // Get All Data
+
+/*
+TASK DAY 2
+    1. Kirim pesan error ketika age kosong / tidak diisi data (get all query)
+    2. Jika data tidak ditemukan maka kirim respon dalam bentuk obj yg memiliki property 'err',
+        template pesan err = data dengan umur ... tidak ditemukan
+    3. Kirim pesan error jika user tidak memberikan salah satu atau kedua data(name,age),
+        template err = Mohon isi data untuk properti 'name', 'age' (get one data query)
+    4. Jika data tidak ditemukan, kirim obj dengan property 'err',
+        template err= Tidak dapat menemukan user dengan nama ... dan umur ...
+    5. Kirim Pesan error jika name, role, age kosong, template err = Tolong isi data 'name', 'age', 'role' (post data)
+    6. Delete one user by age
+
+*/

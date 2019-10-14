@@ -45,8 +45,20 @@ MongoClient.connect(URL, { useNewUrlParser: true, useUnifiedTopology: true }, (e
 
         age = parseInt(age)
 
+        if (!name) {
+            return res.send({ err: "Mohon isi data untuk properti 'name', 'age'" })
+        }
+        if (isNaN(age)) {
+            return res.send({ err: "Mohon isi data untuk properti 'name', 'age'" })
+        }
+
+
         db.collection('users').findOne({ name, age })
             .then((resp) => {
+                if (!resp) {
+
+                    return res.send({ err: `Tidak dapat menemukan user dengan nama ${name} dan umur ${age}` })
+                }
                 res.send(resp)
 
             }).catch((err) => {
@@ -61,9 +73,10 @@ MongoClient.connect(URL, { useNewUrlParser: true, useUnifiedTopology: true }, (e
 
         age = parseInt(age)
 
+
         db.collection('users').find({ age }).toArray()
             .then((resp) => {
-                res.send(resp)
+
 
             }).catch((err) => {
                 res.send(err)
@@ -93,6 +106,17 @@ MongoClient.connect(URL, { useNewUrlParser: true, useUnifiedTopology: true }, (e
     app.post('/users', (req, res) => {
 
         let { name, role, age } = req.body
+
+        if (!name) {
+            return res.send({ err: "Tolong isi data 'name', 'role', 'age'" })
+        }
+        if (!age) {
+            return res.send({ err: "Tolong isi data 'name', 'role', 'age'" })
+        }
+        if (!role) {
+            return res.send({ err: "Tolong isi data 'name', 'role', 'age'" })
+        }
+
         db.collection('users').insertOne({ name, role, age })
             .then((resp) => {
                 res.send({
@@ -130,6 +154,21 @@ MongoClient.connect(URL, { useNewUrlParser: true, useUnifiedTopology: true }, (e
 
     })
 
+    app.delete('/users/:age', (req, res) => {
+        // ambil data dari path variable
+        let age = parseInt(req.params.age)
+
+        db.collection('users').deleteOne({ age })
+            .then(() => {
+                res.send({
+                    status: 'Success',
+                    age: age
+                })
+            }).catch((err) => {
+                res.send(err)
+            })
+    })
+
 
 
 
@@ -144,19 +183,3 @@ app.listen(port, () => {
 // callback function pada listen akan di running ketika berhasil menjalankan API
 
 
-// TASK DAY 1
-    // Get All Data
-
-/*
-TASK DAY 2
-    1. Kirim pesan error ketika age kosong / tidak diisi data (get all query)
-    2. Jika data tidak ditemukan maka kirim respon dalam bentuk obj yg memiliki property 'err',
-        template pesan err = data dengan umur ... tidak ditemukan
-    3. Kirim pesan error jika user tidak memberikan salah satu atau kedua data(name,age),
-        template err = Mohon isi data untuk properti 'name', 'age' (get one data query)
-    4. Jika data tidak ditemukan, kirim obj dengan property 'err',
-        template err= Tidak dapat menemukan user dengan nama ... dan umur ...
-    5. Kirim Pesan error jika name, role, age kosong, template err = Tolong isi data 'name', 'age', 'role' (post data)
-    6. Delete one user by age
-
-*/
